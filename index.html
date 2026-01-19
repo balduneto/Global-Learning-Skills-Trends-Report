@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  LineChart, Line, AreaChart, Area, PieChart, Pie, Cell 
+  PieChart, Pie, Cell 
 } from 'recharts';
 import { 
   Brain, 
@@ -14,16 +14,15 @@ import {
   ShieldCheck, 
   ArrowRight,
   Info,
-  Lightbulb,
-  Menu
+  Lightbulb
 } from 'lucide-react';
 
 // --- CORES E ESTILOS GLOBAIS ---
 const COLORS = {
-  primary: '#A435F0', // Udemy Purpleish
-  secondary: '#1C1D1F', // Dark Background
-  accent: '#2DD4BF', // Teal for innovation
-  warning: '#F59E0B', // Amber for caution/ethics
+  primary: '#A435F0', 
+  secondary: '#1C1D1F',
+  accent: '#2DD4BF', 
+  warning: '#F59E0B', 
   text: '#F7F9FA',
   cardBg: '#2D2F31',
   chart1: '#8b5cf6',
@@ -57,7 +56,7 @@ const leadershipPreparedData = [
 // --- COMPONENTES AUXILIARES ---
 
 const DidacticNote = ({ title, text }) => (
-  <div className="mt-4 bg-blue-900/20 border border-blue-500/30 rounded-lg p-3 flex items-start gap-3 animate-fadeIn">
+  <div className="mt-4 bg-blue-900/20 border border-blue-500/30 rounded-lg p-3 flex items-start gap-3">
     <Lightbulb className="text-yellow-400 shrink-0 mt-0.5" size={18} />
     <div>
       <h4 className="text-blue-200 font-bold text-sm mb-1">{title}</h4>
@@ -67,7 +66,7 @@ const DidacticNote = ({ title, text }) => (
 );
 
 const Card = ({ title, children, noteTitle, noteText, className = "" }) => (
-  <div className={`bg-gray-800 border-l-4 border-purple-500 rounded-lg p-4 md:p-6 shadow-lg hover:shadow-purple-500/20 transition-all duration-300 ${className}`}>
+  <div className={`bg-gray-800 border-l-4 border-purple-500 rounded-lg p-4 md:p-6 shadow-lg ${className}`}>
     <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-white flex items-center gap-2">
       {title}
     </h3>
@@ -79,7 +78,7 @@ const Card = ({ title, children, noteTitle, noteText, className = "" }) => (
 );
 
 const StatBox = ({ label, value, subtext, icon: Icon, color = "text-purple-400" }) => (
-  <div className="bg-gray-900 rounded-xl p-4 md:p-5 border border-gray-700 flex items-start gap-3 md:gap-4 hover:border-purple-500 transition-colors w-full">
+  <div className="bg-gray-900 rounded-xl p-4 md:p-5 border border-gray-700 flex items-start gap-3 md:gap-4 w-full">
     <div className={`p-2 md:p-3 rounded-full bg-gray-800 ${color} shrink-0`}>
       <Icon size={20} className="md:w-6 md:h-6" />
     </div>
@@ -101,7 +100,7 @@ const InsightBadge = ({ text }) => (
 
 // TENDÊNCIA 1
 const SectionAIFluency = () => (
-  <div className="space-y-6 md:space-y-8 animate-fadeIn pb-6">
+  <div className="space-y-6 md:space-y-8 pb-6">
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
       <div>
         <InsightBadge text="Mudança de Paradigma" />
@@ -134,14 +133,22 @@ const SectionAIFluency = () => (
           />
         </div>
       </div>
-      <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col">
-        <h3 className="text-lg font-semibold text-white mb-6">Explosão no Aprendizado de Ferramentas de IA</h3>
-        <div className="h-64 w-full">
+      <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col justify-center">
+        <h3 className="text-lg font-semibold text-white mb-6 text-center">Explosão no Aprendizado de Ferramentas</h3>
+        
+        {/* FIX: Explicit height style to prevent Recharts collapse */}
+        <div style={{ width: '100%', height: 300, minHeight: 300 }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={growthData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <BarChart data={growthData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={true} vertical={false}/>
               <XAxis type="number" stroke="#9CA3AF" hide />
-              <YAxis dataKey="name" type="category" stroke="#F3F4F6" width={100} style={{ fontSize: '12px' }} />
+              <YAxis 
+                dataKey="name" 
+                type="category" 
+                stroke="#F3F4F6" 
+                width={100} 
+                style={{ fontSize: '12px', fontWeight: 'bold' }} 
+              />
               <Tooltip 
                 contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#fff' }} 
                 cursor={{fill: '#374151', opacity: 0.4}}
@@ -150,12 +157,13 @@ const SectionAIFluency = () => (
             </BarChart>
           </ResponsiveContainer>
         </div>
+        
         <p className="text-xs text-gray-500 mt-4 italic text-center">
           *Crescimento anual no consumo de cursos na Udemy Business
         </p>
         <DidacticNote 
           title="Análise de Dados" 
-          text="O crescimento massivo em ferramentas de desenvolvimento (GitHub Copilot) sugere que a área de Tecnologia é a 'ponta de lança' da adoção, pavimentando o caminho para o uso generalizado nos negócios (MS Copilot)."
+          text="O crescimento massivo em ferramentas de desenvolvimento (GitHub Copilot) sugere que a área de Tecnologia é a 'ponta de lança' da adoção."
         />
       </div>
     </div>
@@ -164,21 +172,21 @@ const SectionAIFluency = () => (
       <Card 
         title="Nível 1: Alfabetização"
         noteTitle="Foco Pedagógico"
-        noteText="Nesta fase, o objetivo é remover o medo da tecnologia através do contato inicial e uso pessoal."
+        noteText="Remover o medo da tecnologia através do contato inicial e uso pessoal."
       >
         Familiaridade com ferramentas (ChatGPT, Gemini). Foco em produtividade individual e compreensão básica de riscos e ética.
       </Card>
       <Card 
         title="Nível 2: Assistência"
         noteTitle="Integração"
-        noteText="Aqui a IA deixa de ser uma 'aba no navegador' e passa a integrar softwares corporativos (CRM, ERP)."
+        noteText="A IA deixa de ser uma 'aba no navegador' e passa a integrar softwares corporativos (CRM, ERP)."
       >
         Integração no fluxo de trabalho. IA apoiando análise e decisões estratégicas. Otimização de entrega de produtos.
       </Card>
       <Card 
         title="Nível 3: Agentes"
         noteTitle="Futuro do Trabalho"
-        noteText="A mudança de paradigma: humanos gerenciam 'exércitos' de agentes que executam tarefas autônomas."
+        noteText="Humanos gerenciam 'exércitos' de agentes que executam tarefas autônomas."
       >
         IA agêntica tomando decisões autônomas sob supervisão. Redesign completo de processos e modelos operacionais.
       </Card>
@@ -188,7 +196,7 @@ const SectionAIFluency = () => (
 
 // TENDÊNCIA 2
 const SectionImmersion = () => (
-  <div className="space-y-8 animate-fadeIn">
+  <div className="space-y-8 pb-6">
     <div className="flex flex-col md:flex-row justify-between items-start gap-6">
       <div className="md:w-2/3">
         <InsightBadge text="Metodologia de Aprendizagem" />
@@ -202,7 +210,7 @@ const SectionImmersion = () => (
         </p>
         <DidacticNote 
           title="O Modelo 70-20-10" 
-          text="Este insight valida a regra clássica de RH: 70% do aprendizado vem da experiência prática no trabalho, 20% da interação com outros e apenas 10% de cursos formais. A imersão foca nos 70%."
+          text="Este insight valida a regra clássica de RH: 70% do aprendizado vem da experiência prática no trabalho, 20% da interação com outros e apenas 10% de cursos formais."
         />
       </div>
       <div className="md:w-1/3 w-full">
@@ -259,7 +267,7 @@ const SectionImmersion = () => (
         
         <DidacticNote 
           title="Impacto na Retenção" 
-          text="A Devoteam observou uma queda de 4% na rotatividade. Isso demonstra que investir no desenvolvimento dos funcionários aumenta a lealdade e satisfação, além da produtividade técnica."
+          text="A Devoteam observou uma queda de 4% na rotatividade, demonstrando que investir no desenvolvimento dos funcionários aumenta a lealdade."
         />
       </div>
 
@@ -289,7 +297,7 @@ const SectionImmersion = () => (
         </div>
         <DidacticNote 
           title="Segurança Psicológica" 
-          text="A fase 2 (Simulação) é crucial. Ela cria um ambiente seguro onde o erro é permitido e visto como parte do aprendizado, antes da aplicação em projetos reais."
+          text="A fase 2 (Simulação) é crucial. Ela cria um ambiente seguro onde o erro é permitido antes da aplicação em projetos reais."
         />
       </div>
     </div>
@@ -298,7 +306,7 @@ const SectionImmersion = () => (
 
 // TENDÊNCIA 3
 const SectionLeadership = () => (
-  <div className="space-y-8 animate-fadeIn">
+  <div className="space-y-8 pb-6">
     <div className="text-center max-w-3xl mx-auto mb-10">
       <InsightBadge text="Fator Humano" />
       <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
@@ -306,7 +314,7 @@ const SectionLeadership = () => (
       </h2>
       <p className="text-base md:text-lg text-gray-300">
         Não é possível escalar habilidades de IA sem escalar a confiança. 
-        A ansiedade sobre IA é sintoma de falha na liderança, não apenas na tecnologia.
+        A ansiedade sobre IA é sintoma de falha na liderança.
       </p>
     </div>
 
@@ -314,7 +322,8 @@ const SectionLeadership = () => (
       <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 h-full flex flex-col justify-between">
         <h3 className="text-xl font-bold text-white mb-6 text-center">A Lacuna de Confiança</h3>
         <div className="flex flex-col sm:flex-row justify-around items-center gap-8 h-full">
-          <div className="w-full sm:w-1/2 h-48 relative">
+          {/* FIX: Explicit height style for Pie Charts */}
+          <div className="w-full sm:w-1/2 relative" style={{ height: 200, minHeight: 200 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -334,10 +343,10 @@ const SectionLeadership = () => (
                 </text>
               </PieChart>
             </ResponsiveContainer>
-            <p className="text-center text-xs md:text-sm text-gray-400 mt-2">Confiam na gestão para lidar com riscos de IA</p>
+            <p className="text-center text-xs md:text-sm text-gray-400 mt-2">Confiam na gestão</p>
           </div>
           
-          <div className="w-full sm:w-1/2 h-48 relative">
+          <div className="w-full sm:w-1/2 relative" style={{ height: 200, minHeight: 200 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -357,12 +366,12 @@ const SectionLeadership = () => (
                 </text>
               </PieChart>
             </ResponsiveContainer>
-            <p className="text-center text-xs md:text-sm text-gray-400 mt-2">Acreditam que líderes estão preparados</p>
+            <p className="text-center text-xs md:text-sm text-gray-400 mt-2">Líderes preparados</p>
           </div>
         </div>
         <DidacticNote 
           title="Interpretação da Lacuna" 
-          text="Menos da metade dos funcionários acredita que seus líderes estão prontos. Isso gera resistência à adoção. Líderes precisam ser 'Modelos de Aprendizado', admitindo o que não sabem e aprendendo junto."
+          text="Menos da metade dos funcionários acredita que seus líderes estão prontos. Isso gera resistência à adoção."
         />
       </div>
 
@@ -371,20 +380,20 @@ const SectionLeadership = () => (
           title="O Novo Papel do Líder" 
           className="bg-gray-800/50"
           noteTitle="Soft Skills na Liderança"
-          noteText="A liderança na era da IA é menos sobre comando e controle e mais sobre orquestração e ética. O líder vira um curador do ambiente de trabalho."
+          noteText="A liderança na era da IA é menos sobre comando e controle e mais sobre orquestração e ética."
         >
           <ul className="space-y-3">
             <li className="flex items-start gap-3">
               <ShieldCheck className="text-green-400 mt-1" size={20} />
-              <span className="text-gray-300 text-sm"><strong>Guardião Ético:</strong> Estabelecer limites claros e "regras do jogo" para uso de dados e vieses.</span>
+              <span className="text-gray-300 text-sm"><strong>Guardião Ético:</strong> Estabelecer limites claros e "regras do jogo".</span>
             </li>
             <li className="flex items-start gap-3">
               <Users className="text-blue-400 mt-1" size={20} />
-              <span className="text-gray-300 text-sm"><strong>Facilitador de Autonomia:</strong> Distribuir a tomada de decisão para quem está na ponta.</span>
+              <span className="text-gray-300 text-sm"><strong>Facilitador de Autonomia:</strong> Distribuir a tomada de decisão.</span>
             </li>
             <li className="flex items-start gap-3">
               <Brain className="text-purple-400 mt-1" size={20} />
-              <span className="text-gray-300 text-sm"><strong>Modelo de Aprendizado:</strong> Líderes devem usar IA visivelmente e admitir o que não sabem.</span>
+              <span className="text-gray-300 text-sm"><strong>Modelo de Aprendizado:</strong> Líderes devem usar IA visivelmente.</span>
             </li>
           </ul>
         </Card>
@@ -395,7 +404,7 @@ const SectionLeadership = () => (
           <div className="flex items-center gap-2">
             <TrendingUp className="text-green-400" size={18} />
             <span className="text-white font-bold">2x</span>
-            <span className="text-gray-400 text-sm">Aumento na taxa de promoção dos participantes.</span>
+            <span className="text-gray-400 text-sm">Aumento na taxa de promoção.</span>
           </div>
         </div>
       </div>
@@ -405,7 +414,7 @@ const SectionLeadership = () => (
 
 // TENDÊNCIA 4
 const SectionBeyondAI = () => (
-  <div className="space-y-8 animate-fadeIn">
+  <div className="space-y-8 pb-6">
     <div className="grid md:grid-cols-2 gap-12">
       <div>
         <InsightBadge text="Futuro do Trabalho" />
@@ -414,8 +423,7 @@ const SectionBeyondAI = () => (
         </h2>
         <p className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed">
           A IA é apenas a transformação atual. A verdadeira vantagem competitiva reside nas 
-          <strong> Habilidades Adaptativas</strong> que transcendem a tecnologia: pensamento crítico, 
-          resiliência e julgamento humano.
+          <strong> Habilidades Adaptativas</strong> que transcendem a tecnologia.
         </p>
         
         <div className="bg-gray-800 p-6 rounded-xl border-l-4 border-red-500">
@@ -428,15 +436,17 @@ const SectionBeyondAI = () => (
 
         <DidacticNote 
           title="Habilidades 'À Prova de Futuro'" 
-          text="Tecnologias mudam (hoje é GenAI, amanhã Computação Quântica), mas habilidades adaptativas (resiliência, pensamento crítico) permitem navegar em QUALQUER mudança."
+          text="Tecnologias mudam, mas habilidades adaptativas (resiliência, pensamento crítico) permitem navegar em QUALQUER mudança."
         />
       </div>
 
       <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
-        <h3 className="text-lg font-semibold text-white mb-6">Crescimento de "Soft Skills" (Habilidades Adaptativas)</h3>
-        <div className="h-64 w-full">
+        <h3 className="text-lg font-semibold text-white mb-6">Crescimento de "Soft Skills"</h3>
+        
+        {/* FIX: Explicit height style for Bar Chart */}
+        <div style={{ width: '100%', height: 300, minHeight: 300 }}>
            <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={skillsData} layout="vertical" margin={{ left: 0 }}>
+            <BarChart data={skillsData} layout="vertical" margin={{ left: 0, right: 30 }}>
                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#374151" />
                <XAxis type="number" hide />
                <YAxis dataKey="subject" type="category" stroke="#fff" width={100} tick={{fontSize: 12}} />
@@ -445,6 +455,7 @@ const SectionBeyondAI = () => (
             </BarChart>
            </ResponsiveContainer>
         </div>
+
         <p className="text-center text-xs text-gray-500 mt-2">Crescimento no consumo de cursos na Udemy (2024-2025)</p>
         <DidacticNote 
           title="Por que Soft Skills agora?" 
@@ -481,7 +492,7 @@ const UdemyReportApp = () => {
     switch (activeTab) {
       case 'intro':
         return (
-          <div className="text-center space-y-8 animate-fadeIn py-10">
+          <div className="text-center space-y-8 py-10">
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 px-2">
               2026
             </h1>
@@ -524,7 +535,7 @@ const UdemyReportApp = () => {
       case 'trend3': return <SectionLeadership />;
       case 'trend4': return <SectionBeyondAI />;
       case 'methodology': return (
-        <div className="max-w-3xl mx-auto space-y-6 text-gray-300 animate-fadeIn px-4">
+        <div className="max-w-3xl mx-auto space-y-6 text-gray-300 px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Metodologia & Sobre</h2>
           <Card title="Fonte de Dados">
             <p className="mb-4">
@@ -551,20 +562,7 @@ const UdemyReportApp = () => {
 
   return (
     <div className="min-h-screen bg-[#111827] text-white font-sans flex flex-col md:flex-row overflow-hidden relative">
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-out forwards;
-        }
-        /* Garantir rolagem suave no iOS */
-        main {
-          -webkit-overflow-scrolling: touch;
-        }
-      `}</style>
-
+      
       {/* Sidebar Navigation */}
       <aside className="w-full md:w-20 lg:w-64 bg-[#1F2937] border-r border-gray-700 flex flex-col items-center md:items-start p-4 z-10 hidden md:flex">
         <div className="mb-8 p-2 font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 cursor-pointer" onClick={() => setActiveTab('intro')}>
@@ -618,7 +616,7 @@ const UdemyReportApp = () => {
         </div>
         
         {/* Mobile Nav Helper (Bottom Fixed) */}
-        <div className="md:hidden fixed bottom-0 left-0 w-full bg-[#1F2937] border-t border-gray-700 p-2 flex justify-around z-50 safe-area-pb">
+        <div className="md:hidden fixed bottom-0 left-0 w-full bg-[#1F2937] border-t border-gray-700 p-2 flex justify-around z-50">
            <button onClick={() => setActiveTab('intro')} className={`p-3 rounded-full ${activeTab === 'intro' ? 'bg-gray-700 text-white' : 'text-gray-400'}`}><BookOpen size={20}/></button>
            <button onClick={() => setActiveTab('trend1')} className={`p-3 rounded-full ${activeTab === 'trend1' ? 'bg-gray-700 text-purple-400' : 'text-purple-400'}`}><Brain size={20}/></button>
            <button onClick={() => setActiveTab('trend2')} className={`p-3 rounded-full ${activeTab === 'trend2' ? 'bg-gray-700 text-pink-400' : 'text-pink-400'}`}><Zap size={20}/></button>
