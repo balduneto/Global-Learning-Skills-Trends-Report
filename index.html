@@ -1,0 +1,618 @@
+import React, { useState } from 'react';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+  LineChart, Line, AreaChart, Area, PieChart, Pie, Cell 
+} from 'recharts';
+import { 
+  Brain, 
+  Zap, 
+  Users, 
+  Compass, 
+  TrendingUp, 
+  BookOpen, 
+  Award, 
+  ShieldCheck, 
+  ArrowRight,
+  Info,
+  Lightbulb
+} from 'lucide-react';
+
+// --- CORES E ESTILOS GLOBAIS ---
+const COLORS = {
+  primary: '#A435F0', // Udemy Purpleish
+  secondary: '#1C1D1F', // Dark Background
+  accent: '#2DD4BF', // Teal for innovation
+  warning: '#F59E0B', // Amber for caution/ethics
+  text: '#F7F9FA',
+  cardBg: '#2D2F31',
+  chart1: '#8b5cf6',
+  chart2: '#ec4899',
+  chart3: '#14b8a6'
+};
+
+// --- DADOS DO RELATÓRIO ---
+
+const growthData = [
+  { name: 'MS Copilot', fullName: 'Microsoft Copilot', growth: 3400, label: '+3.400%' },
+  { name: 'GitHub Copilot', fullName: 'GitHub Copilot', growth: 13534, label: '+13.534%' },
+];
+
+const skillsData = [
+  { subject: 'Decisão', fullSubject: 'Tomada de Decisão', A: 38, fullMark: 100 },
+  { subject: 'Pensamento', fullSubject: 'Pensamento Crítico', A: 37, fullMark: 100 },
+  { subject: 'Comunicação', fullSubject: 'Comunicação', A: 25, fullMark: 100 },
+];
+
+const leadershipData = [
+  { name: 'Confiam', value: 55 },
+  { name: 'Não Confiam', value: 45 },
+];
+
+const leadershipPreparedData = [
+  { name: 'Preparados', value: 48 },
+  { name: 'Não Prep.', value: 52 },
+];
+
+// --- COMPONENTES AUXILIARES ---
+
+const DidacticNote = ({ title, text }) => (
+  <div className="mt-4 bg-blue-900/20 border border-blue-500/30 rounded-lg p-3 flex items-start gap-3 animate-fadeIn">
+    <Lightbulb className="text-yellow-400 shrink-0 mt-0.5" size={18} />
+    <div>
+      <h4 className="text-blue-200 font-bold text-sm mb-1">{title}</h4>
+      <p className="text-gray-300 text-xs md:text-sm leading-snug">{text}</p>
+    </div>
+  </div>
+);
+
+const Card = ({ title, children, noteTitle, noteText, className = "" }) => (
+  <div className={`bg-gray-800 border-l-4 border-purple-500 rounded-lg p-4 md:p-6 shadow-lg hover:shadow-purple-500/20 transition-all duration-300 ${className}`}>
+    <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-white flex items-center gap-2">
+      {title}
+    </h3>
+    <div className="text-gray-300 text-sm md:text-base leading-relaxed">
+      {children}
+    </div>
+    {(noteTitle || noteText) && <DidacticNote title={noteTitle} text={noteText} />}
+  </div>
+);
+
+const StatBox = ({ label, value, subtext, icon: Icon, color = "text-purple-400" }) => (
+  <div className="bg-gray-900 rounded-xl p-4 md:p-5 border border-gray-700 flex items-start gap-3 md:gap-4 hover:border-purple-500 transition-colors w-full">
+    <div className={`p-2 md:p-3 rounded-full bg-gray-800 ${color} shrink-0`}>
+      <Icon size={20} className="md:w-6 md:h-6" />
+    </div>
+    <div>
+      <div className="text-2xl md:text-3xl font-extrabold text-white">{value}</div>
+      <div className="text-xs md:text-sm font-medium text-gray-400 uppercase tracking-wide">{label}</div>
+      {subtext && <div className="text-[10px] md:text-xs text-gray-500 mt-1">{subtext}</div>}
+    </div>
+  </div>
+);
+
+const InsightBadge = ({ text }) => (
+  <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-teal-900/50 text-teal-300 text-[10px] md:text-xs font-bold border border-teal-700 mb-3 md:mb-4">
+    <Zap size={10} className="md:w-3 md:h-3" /> INSIGHT ESTRATÉGICO
+  </div>
+);
+
+// --- SEÇÕES DE CONTEÚDO ---
+
+// TENDÊNCIA 1
+const SectionAIFluency = () => (
+  <div className="space-y-6 md:space-y-8 animate-fadeIn pb-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+      <div>
+        <InsightBadge text="Mudança de Paradigma" />
+        <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4">
+          <span className="text-purple-400">01.</span> A Fluência em IA é o Novo Sistema Operacional
+        </h2>
+        <p className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed">
+          A fluência em IA deixou de ser um objetivo técnico para se tornar a base operacional das empresas. 
+          Não se trata apenas de usar ferramentas, mas de reestruturar a empresa para <strong>experimentar</strong> e 
+          <strong> incorporar</strong> a IA aos fluxos de trabalho.
+        </p>
+        <DidacticNote 
+          title="Conceito Chave: Fluência vs. Habilidade" 
+          text="Habilidade é saber usar a ferramenta. Fluência é saber QUANDO usar, entender suas limitações éticas e aplicá-la estrategicamente para resolver problemas complexos."
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mt-6">
+          <StatBox 
+            icon={TrendingUp} 
+            value="+13.534%" 
+            label="GitHub Copilot" 
+            subtext="Crescimento em Tech"
+            color="text-green-400"
+          />
+           <StatBox 
+            icon={TrendingUp} 
+            value="+3.400%" 
+            label="MS Copilot" 
+            subtext="Crescimento em Business"
+            color="text-blue-400"
+          />
+        </div>
+      </div>
+      <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
+        <h3 className="text-lg font-semibold text-white mb-6">Explosão no Aprendizado de Ferramentas de IA</h3>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={growthData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <XAxis type="number" stroke="#9CA3AF" hide />
+              <YAxis dataKey="name" type="category" stroke="#F3F4F6" width={120} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#fff' }} 
+                cursor={{fill: '#374151', opacity: 0.4}}
+              />
+              <Bar dataKey="growth" fill="#8b5cf6" radius={[0, 4, 4, 0]} label={{ position: 'right', fill: '#fff', formatter: (val) => `+${val.toLocaleString()}%` }} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <p className="text-xs text-gray-500 mt-4 italic text-center">
+          *Crescimento anual no consumo de cursos na Udemy Business
+        </p>
+        <DidacticNote 
+          title="Análise de Dados" 
+          text="O crescimento massivo em ferramentas de desenvolvimento (GitHub Copilot) sugere que a área de Tecnologia é a 'ponta de lança' da adoção, pavimentando o caminho para o uso generalizado nos negócios (MS Copilot)."
+        />
+      </div>
+    </div>
+
+    <div className="grid md:grid-cols-3 gap-6">
+      <Card 
+        title="Nível 1: Alfabetização"
+        noteTitle="Foco Pedagógico"
+        noteText="Nesta fase, o objetivo é remover o medo da tecnologia através do contato inicial e uso pessoal."
+      >
+        Familiaridade com ferramentas (ChatGPT, Gemini). Foco em produtividade individual e compreensão básica de riscos e ética.
+      </Card>
+      <Card 
+        title="Nível 2: Assistência"
+        noteTitle="Integração"
+        noteText="Aqui a IA deixa de ser uma 'aba no navegador' e passa a integrar softwares corporativos (CRM, ERP)."
+      >
+        Integração no fluxo de trabalho. IA apoiando análise e decisões estratégicas. Otimização de entrega de produtos.
+      </Card>
+      <Card 
+        title="Nível 3: Agentes"
+        noteTitle="Futuro do Trabalho"
+        noteText="A mudança de paradigma: humanos gerenciam 'exércitos' de agentes que executam tarefas autônomas."
+      >
+        IA agêntica tomando decisões autônomas sob supervisão. Redesign completo de processos e modelos operacionais.
+      </Card>
+    </div>
+  </div>
+);
+
+// TENDÊNCIA 2
+const SectionImmersion = () => (
+  <div className="space-y-8 animate-fadeIn">
+    <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+      <div className="md:w-2/3">
+        <InsightBadge text="Metodologia de Aprendizagem" />
+        <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+          <span className="text-pink-500">02.</span> A Imersão Supera a Instrução
+        </h2>
+        <p className="text-base md:text-lg text-gray-300 mb-6">
+          Aprender IA acontece de forma mais eficaz <strong>no fluxo de trabalho</strong>. 
+          O modelo de "sala de aula" isolada está obsoleto. A prática em projetos reais consolida habilidades 
+          de forma 3x mais eficiente.
+        </p>
+        <DidacticNote 
+          title="O Modelo 70-20-10" 
+          text="Este insight valida a regra clássica de RH: 70% do aprendizado vem da experiência prática no trabalho, 20% da interação com outros e apenas 10% de cursos formais. A imersão foca nos 70%."
+        />
+      </div>
+      <div className="md:w-1/3 w-full">
+         <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-6 rounded-xl shadow-lg text-center">
+            <h3 className="text-5xl font-extrabold text-white mb-2">3x</h3>
+            <p className="text-white font-medium">Mais Eficiente</p>
+            <p className="text-xs text-pink-200 mt-2">Alunos que aplicam habilidades na prática (Fonte: Carnegie Mellon)</p>
+         </div>
+      </div>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-8 mt-8">
+      {/* Case Studies */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <Award className="text-yellow-400" /> Casos de Sucesso
+        </h3>
+        
+        <div className="bg-gray-800 p-5 rounded-lg border-l-4 border-blue-500">
+          <div className="flex justify-between items-start">
+            <h4 className="font-bold text-white text-lg">Genpact</h4>
+            <span className="bg-blue-900 text-blue-200 text-xs px-2 py-1 rounded">12 Semanas</span>
+          </div>
+          <p className="text-gray-400 text-sm mt-2 mb-3">Programa imersivo para conhecimento em LLMs e IA Generativa.</p>
+          <div className="flex gap-4">
+            <div className="text-center">
+              <span className="block text-2xl font-bold text-white">100%</span>
+              <span className="text-xs text-gray-500">Meta Atingida</span>
+            </div>
+            <div className="text-center">
+              <span className="block text-2xl font-bold text-white">75%</span>
+              <span className="text-xs text-gray-500">Proficiência</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 p-5 rounded-lg border-l-4 border-green-500">
+          <div className="flex justify-between items-start">
+            <h4 className="font-bold text-white text-lg">Devoteam</h4>
+            <span className="bg-green-900 text-green-200 text-xs px-2 py-1 rounded">3 Meses</span>
+          </div>
+          <p className="text-gray-400 text-sm mt-2 mb-3">Treinamento global de IA generativa para 11.000 funcionários.</p>
+          <div className="flex gap-4">
+            <div className="text-center">
+              <span className="block text-2xl font-bold text-white">70%</span>
+              <span className="text-xs text-gray-500">Capacitados</span>
+            </div>
+            <div className="text-center">
+              <span className="block text-2xl font-bold text-white text-green-400">-4%</span>
+              <span className="text-xs text-gray-500">Rotatividade</span>
+            </div>
+          </div>
+        </div>
+        
+        <DidacticNote 
+          title="Impacto na Retenção" 
+          text="A Devoteam observou uma queda de 4% na rotatividade. Isso demonstra que investir no desenvolvimento dos funcionários aumenta a lealdade e satisfação, além da produtividade técnica."
+        />
+      </div>
+
+      {/* Visual Flow */}
+      <div className="bg-gray-900 p-6 rounded-xl border border-gray-700 flex flex-col justify-center">
+        <h3 className="text-lg font-semibold text-white mb-6 text-center">O Ciclo de Habilidades Imersivas</h3>
+        <div className="space-y-4 relative">
+          <div className="absolute left-4 top-4 bottom-4 w-0.5 bg-gray-700"></div>
+          
+          <div className="relative pl-10">
+            <div className="absolute left-2 top-1.5 w-4 h-4 bg-purple-500 rounded-full border-4 border-gray-900"></div>
+            <h5 className="text-white font-bold">1. Aquisição</h5>
+            <p className="text-sm text-gray-400">Aprender o conceito (Microlearning).</p>
+          </div>
+          
+          <div className="relative pl-10">
+            <div className="absolute left-2 top-1.5 w-4 h-4 bg-pink-500 rounded-full border-4 border-gray-900"></div>
+            <h5 className="text-white font-bold">2. Domínio (Simulação)</h5>
+            <p className="text-sm text-gray-400">Prática em ambiente seguro (Sandbox/Labs).</p>
+          </div>
+          
+          <div className="relative pl-10">
+            <div className="absolute left-2 top-1.5 w-4 h-4 bg-teal-500 rounded-full border-4 border-gray-900"></div>
+            <h5 className="text-white font-bold">3. Aplicação no Fluxo</h5>
+            <p className="text-sm text-gray-400">Uso em projetos reais com feedback imediato.</p>
+          </div>
+        </div>
+        <DidacticNote 
+          title="Segurança Psicológica" 
+          text="A fase 2 (Simulação) é crucial. Ela cria um ambiente seguro onde o erro é permitido e visto como parte do aprendizado, antes da aplicação em projetos reais."
+        />
+      </div>
+    </div>
+  </div>
+);
+
+// TENDÊNCIA 3
+const SectionLeadership = () => (
+  <div className="space-y-8 animate-fadeIn">
+    <div className="text-center max-w-3xl mx-auto mb-10">
+      <InsightBadge text="Fator Humano" />
+      <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+        <span className="text-yellow-500">03.</span> Liderança, Ética e Autonomia
+      </h2>
+      <p className="text-base md:text-lg text-gray-300">
+        Não é possível escalar habilidades de IA sem escalar a confiança. 
+        A ansiedade sobre IA é sintoma de falha na liderança, não apenas na tecnologia.
+      </p>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-8 items-center">
+      <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 h-full">
+        <h3 className="text-xl font-bold text-white mb-6 text-center">A Lacuna de Confiança</h3>
+        <div className="flex flex-col md:flex-row justify-around items-center gap-8">
+          <div className="w-48 h-48 relative">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={leadershipData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  <Cell fill="#10B981" />
+                  <Cell fill="#374151" />
+                </Pie>
+                <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="fill-white text-2xl font-bold">
+                  55%
+                </text>
+              </PieChart>
+            </ResponsiveContainer>
+            <p className="text-center text-sm text-gray-400 mt-2">Confiam na gestão para lidar com riscos de IA</p>
+          </div>
+          
+          <div className="w-48 h-48 relative">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={leadershipPreparedData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  <Cell fill="#F59E0B" />
+                  <Cell fill="#374151" />
+                </Pie>
+                <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="fill-white text-2xl font-bold">
+                  48%
+                </text>
+              </PieChart>
+            </ResponsiveContainer>
+            <p className="text-center text-sm text-gray-400 mt-2">Acreditam que líderes estão preparados</p>
+          </div>
+        </div>
+        <DidacticNote 
+          title="Interpretação da Lacuna" 
+          text="Menos da metade dos funcionários acredita que seus líderes estão prontos. Isso gera resistência à adoção. Líderes precisam ser 'Modelos de Aprendizado', admitindo o que não sabem e aprendendo junto."
+        />
+      </div>
+
+      <div className="space-y-4">
+        <Card 
+          title="O Novo Papel do Líder" 
+          className="bg-gray-800/50"
+          noteTitle="Soft Skills na Liderança"
+          noteText="A liderança na era da IA é menos sobre comando e controle e mais sobre orquestração e ética. O líder vira um curador do ambiente de trabalho."
+        >
+          <ul className="space-y-3">
+            <li className="flex items-start gap-3">
+              <ShieldCheck className="text-green-400 mt-1" size={20} />
+              <span className="text-gray-300"><strong>Guardião Ético:</strong> Estabelecer limites claros e "regras do jogo" para uso de dados e vieses.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Users className="text-blue-400 mt-1" size={20} />
+              <span className="text-gray-300"><strong>Facilitador de Autonomia:</strong> Distribuir a tomada de decisão para quem está na ponta.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Brain className="text-purple-400 mt-1" size={20} />
+              <span className="text-gray-300"><strong>Modelo de Aprendizado:</strong> Líderes devem usar IA visivelmente e admitir o que não sabem.</span>
+            </li>
+          </ul>
+        </Card>
+        
+        <div className="bg-blue-900/20 border border-blue-800 p-4 rounded-lg">
+          <h4 className="text-blue-300 font-bold mb-1">Destaque: PepsiCo</h4>
+          <p className="text-sm text-gray-300 mb-2">Programa de Liderança em Compras</p>
+          <div className="flex items-center gap-2">
+            <TrendingUp className="text-green-400" size={18} />
+            <span className="text-white font-bold">2x</span>
+            <span className="text-gray-400 text-sm">Aumento na taxa de promoção dos participantes.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// TENDÊNCIA 4
+const SectionBeyondAI = () => (
+  <div className="space-y-8 animate-fadeIn">
+    <div className="grid md:grid-cols-2 gap-12">
+      <div>
+        <InsightBadge text="Futuro do Trabalho" />
+        <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+          <span className="text-red-500">04.</span> Se a IA é a Linha de Chegada, Você Perdeu
+        </h2>
+        <p className="text-base md:text-lg text-gray-300 mb-6 leading-relaxed">
+          A IA é apenas a transformação atual. A verdadeira vantagem competitiva reside nas 
+          <strong> Habilidades Adaptativas</strong> que transcendem a tecnologia: pensamento crítico, 
+          resiliência e julgamento humano.
+        </p>
+        
+        <div className="bg-gray-800 p-6 rounded-xl border-l-4 border-red-500">
+          <h3 className="font-bold text-white text-lg mb-2">O Paradoxo da Inovação</h3>
+          <p className="text-gray-300 italic mb-4">
+            "Funcionários altamente resilientes e adaptáveis são <span className="text-white font-bold text-xl">3.8x</span> mais inovadores."
+          </p>
+          <div className="text-xs text-gray-500 text-right">- McKinsey (Citado no relatório)</div>
+        </div>
+
+        <DidacticNote 
+          title="Habilidades 'À Prova de Futuro'" 
+          text="Tecnologias mudam (hoje é GenAI, amanhã Computação Quântica), mas habilidades adaptativas (resiliência, pensamento crítico) permitem navegar em QUALQUER mudança."
+        />
+      </div>
+
+      <div className="bg-gray-800 p-6 rounded-xl border border-gray-700">
+        <h3 className="text-lg font-semibold text-white mb-6">Crescimento de "Soft Skills" (Habilidades Adaptativas)</h3>
+        <div className="h-64">
+           <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={skillsData} layout="vertical" margin={{ left: 20 }}>
+               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#374151" />
+               <XAxis type="number" hide />
+               <YAxis dataKey="subject" type="category" stroke="#fff" width={140} tick={{fontSize: 12}} />
+               <Tooltip cursor={{fill: 'transparent'}} contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#fff' }}/>
+               <Bar dataKey="A" name="Crescimento (%)" fill="#F43F5E" radius={[0, 4, 4, 0]} barSize={20} label={{ position: 'right', fill: '#fff', formatter: (val) => `+${val}%` }} />
+            </BarChart>
+           </ResponsiveContainer>
+        </div>
+        <p className="text-center text-xs text-gray-500 mt-2">Crescimento no consumo de cursos na Udemy (2024-2025)</p>
+        <DidacticNote 
+          title="Por que Soft Skills agora?" 
+          text="Com a IA assumindo tarefas técnicas e repetitivas, o valor humano se desloca para o julgamento, a empatia e a capacidade de conectar pontos que a IA ainda não vê."
+        />
+      </div>
+    </div>
+    
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-gray-900 p-4 rounded-lg border border-gray-800 text-center hover:border-red-500 transition-colors">
+        <Compass className="mx-auto text-red-400 mb-2" />
+        <h4 className="text-white font-bold">Navegação na Ambiguidade</h4>
+        <p className="text-xs text-gray-400 mt-1">Capacidade de operar sem respostas claras.</p>
+      </div>
+      <div className="bg-gray-900 p-4 rounded-lg border border-gray-800 text-center hover:border-red-500 transition-colors">
+        <Brain className="mx-auto text-red-400 mb-2" />
+        <h4 className="text-white font-bold">Julgamento Humano</h4>
+        <p className="text-xs text-gray-400 mt-1">Validar e aprimorar resultados da IA.</p>
+      </div>
+      <div className="bg-gray-900 p-4 rounded-lg border border-gray-800 text-center hover:border-red-500 transition-colors">
+        <Award className="mx-auto text-red-400 mb-2" />
+        <h4 className="text-white font-bold">Agilidade de Aprendizado</h4>
+        <p className="text-xs text-gray-400 mt-1">Desaprender e reaprender rapidamente.</p>
+      </div>
+    </div>
+  </div>
+);
+
+// MAIN APP COMPONENT
+const UdemyReportApp = () => {
+  const [activeTab, setActiveTab] = useState('intro');
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'intro':
+        return (
+          <div className="text-center space-y-8 animate-fadeIn py-10">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4">
+              2026
+            </h1>
+            <h2 className="text-3xl text-white font-light tracking-widest uppercase mb-8">
+              Global Learning & <br/> Skills Trends Report
+            </h2>
+            <div className="max-w-2xl mx-auto bg-gray-800/50 p-8 rounded-2xl backdrop-blur-sm border border-gray-700">
+              <p className="text-xl text-gray-300 leading-relaxed mb-6">
+                "Navegação transformacional na era da IA e além."
+              </p>
+              <button 
+                onClick={() => setActiveTab('trend1')}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 flex items-center gap-2 mx-auto"
+              >
+                Explorar Tendências <ArrowRight size={20} />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-12 text-gray-500 text-sm">
+              <div className="flex flex-col items-center gap-2">
+                <Brain size={24} className="text-purple-500" />
+                <span>Fluência em IA</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <Zap size={24} className="text-pink-500" />
+                <span>Imersão &gt; Instrução</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <Users size={24} className="text-yellow-500" />
+                <span>Liderança Ética</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <Compass size={24} className="text-red-500" />
+                <span>Habilidades Adaptativas</span>
+              </div>
+            </div>
+          </div>
+        );
+      case 'trend1': return <SectionAIFluency />;
+      case 'trend2': return <SectionImmersion />;
+      case 'trend3': return <SectionLeadership />;
+      case 'trend4': return <SectionBeyondAI />;
+      case 'methodology': return (
+        <div className="max-w-3xl mx-auto space-y-6 text-gray-300 animate-fadeIn">
+          <h2 className="text-3xl font-bold text-white mb-6">Metodologia & Sobre</h2>
+          <Card title="Fonte de Dados">
+            <p className="mb-4">
+              Para este relatório, a Udemy analisou dados de milhares de clientes em todo o mundo.
+            </p>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><strong>Período de Análise:</strong> 1º de Julho de 2024 a 30 de Junho de 2025.</li>
+              <li><strong>Comparação:</strong> Crescimento percentual comparado ao período anterior (Jul 2023 - Jun 2024).</li>
+              <li><strong>Escopo:</strong> Consumo total de alunos de negócios em todos os tópicos de cursos.</li>
+            </ul>
+          </Card>
+          <div className="bg-gray-800 p-6 rounded-lg text-sm">
+            <h3 className="font-bold text-white mb-2">Sobre a Udemy Business</h3>
+            <p>
+              Plataforma de aceleração de habilidades com inteligência artificial, atendendo empresas como 
+              Ericsson, Samsung, Banco Mundial e Volkswagen para criar equipes ágeis e preparadas para o futuro.
+            </p>
+          </div>
+        </div>
+      );
+      default: return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#111827] text-white font-sans flex flex-col md:flex-row overflow-hidden">
+      {/* Sidebar Navigation */}
+      <aside className="w-full md:w-20 lg:w-64 bg-[#1F2937] border-r border-gray-700 flex flex-col items-center md:items-start p-4 z-10">
+        <div className="mb-8 p-2 font-bold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 cursor-pointer" onClick={() => setActiveTab('intro')}>
+          <span className="hidden lg:inline">Udemy Trends</span>
+          <span className="lg:hidden">U</span>
+        </div>
+        
+        <nav className="space-y-4 w-full">
+          {[
+            { id: 'trend1', icon: Brain, label: '1. Fluência em IA', color: 'text-purple-400' },
+            { id: 'trend2', icon: Zap, label: '2. Imersão', color: 'text-pink-400' },
+            { id: 'trend3', icon: Users, label: '3. Liderança', color: 'text-yellow-400' },
+            { id: 'trend4', icon: Compass, label: '4. Além da IA', color: 'text-red-400' },
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${
+                activeTab === item.id 
+                  ? 'bg-gray-700 shadow-lg translate-x-1' 
+                  : 'hover:bg-gray-800 text-gray-400'
+              }`}
+            >
+              <item.icon className={item.color} size={24} />
+              <span className={`hidden lg:inline font-medium ${activeTab === item.id ? 'text-white' : ''}`}>
+                {item.label}
+              </span>
+            </button>
+          ))}
+          
+          <div className="h-px bg-gray-700 my-4 w-full"></div>
+          
+          <button
+            onClick={() => setActiveTab('methodology')}
+            className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${activeTab === 'methodology' ? 'bg-gray-700 text-white' : 'hover:bg-gray-800 text-gray-400'}`}
+          >
+            <Info size={24} />
+            <span className="hidden lg:inline">Metodologia</span>
+          </button>
+        </nav>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-y-auto relative h-screen">
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-[#1F2937] to-[#111827] -z-10"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-900/10 rounded-full blur-3xl -z-10"></div>
+
+        <div className="p-6 md:p-12 max-w-6xl mx-auto pb-24">
+          {renderContent()}
+        </div>
+        
+        {/* Mobile Nav Helper (Bottom) */}
+        <div className="md:hidden fixed bottom-0 left-0 w-full bg-[#1F2937] border-t border-gray-700 p-2 flex justify-around z-50">
+           <button onClick={() => setActiveTab('intro')} className="p-2 text-gray-400"><BookOpen/></button>
+           <button onClick={() => setActiveTab('trend1')} className="p-2 text-purple-400"><Brain/></button>
+           <button onClick={() => setActiveTab('trend2')} className="p-2 text-pink-400"><Zap/></button>
+           <button onClick={() => setActiveTab('trend3')} className="p-2 text-yellow-400"><Users/></button>
+           <button onClick={() => setActiveTab('trend4')} className="p-2 text-red-400"><Compass/></button>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default UdemyReportApp;
